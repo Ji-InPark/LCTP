@@ -2,6 +2,7 @@
 
 ### Backend service for [leetcode.click](https://leetcode.click)
 
-- Flask
+- Express
+- JavaScript
 - Fly.io
 - GitHub Action
