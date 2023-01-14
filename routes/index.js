@@ -22,13 +22,7 @@ function updateTodayProblemLink() {
   })
 }
 
-cron.schedule('0 */5 * * * *', () => {
-  const used = process.memoryUsage();
-  for (let key in used) {
-    console.log(`${key} ${Math.round(used[key] / 1024 / 1024 * 100) / 100} MB`);
-  }
-  global.gc();
-});
+cron.schedule('0 */5 * * * *', () => global.gc());
 
 cron.schedule('0/5 0 9 * * *', updateTodayProblemLink, {
   timezone: "Asia/Seoul"
