@@ -16,15 +16,23 @@ router.get('/', function(req, res) {
   res.send(todayProblemLink)
 });
 
+router.post('/', function(req, res) {
+  updateTodayProblemLink();
+  res.send('Update url called')
+});
+
 function updateTodayProblemLink() {
   axios.post('https://leetcode.com/graphql/', {query: query}).then(response => {
+    const previousUrl = todayProblemLink;
     todayProblemLink = `https://leetcode.com${response.data["data"]["activeDailyCodingChallengeQuestion"]["link"]}`
+    console.log('Url Update Request')
+    console.log(`previous url: ${previousUrl}\nupdated url: ${todayProblemLink}`)
   })
 }
 
 cron.schedule('0 */5 * * * *', () => global.gc());
 
-cron.schedule('0/10 0/5 9 * * *', updateTodayProblemLink, {
+cron.schedule('0/10 0 9 * * *', updateTodayProblemLink, {
   timezone: "Asia/Seoul"
 });
 
