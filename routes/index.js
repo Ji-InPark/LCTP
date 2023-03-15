@@ -16,6 +16,11 @@ router.get('/', function(req, res) {
   res.send(todayProblemLink)
 });
 
+router.get('/title', function(req, res) {
+  getTodayProblemTitle()
+    .then(title => res.send(title));
+});
+
 router.post('/', function(req, res) {
   updateTodayProblemLink();
   res.send('Update url called')
@@ -27,6 +32,12 @@ function updateTodayProblemLink() {
     todayProblemLink = `https://leetcode.com${response.data["data"]["activeDailyCodingChallengeQuestion"]["link"]}`
     console.log('Url Update Request')
     console.log(`previous url: ${previousUrl}\nupdated url: ${todayProblemLink}`)
+  })
+}
+
+function getTodayProblemTitle() {
+  return axios.post('https://leetcode.com/graphql/', {query: query}).then(response => {
+    return response.data["data"]["activeDailyCodingChallengeQuestion"]["question"]["title"]
   })
 }
 
