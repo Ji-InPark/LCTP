@@ -37,7 +37,9 @@ function updateTodayProblemLink() {
 
 function getTodayProblemTitle() {
   return axios.post('https://leetcode.com/graphql/', {query: query}).then(response => {
-    return response.data["data"]["activeDailyCodingChallengeQuestion"]["question"]["title"]
+    const question = response.data["data"]["activeDailyCodingChallengeQuestion"]["question"];
+
+    return `${question["frontendQuestionId"]}. ${question["title"]}`
   })
 }
 
