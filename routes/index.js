@@ -21,6 +21,11 @@ router.get('/title', function(req, res) {
     .then(title => res.send(title));
 });
 
+router.get('/difficulty', function(req, res) {
+  getTodayProblemDifficulty()
+    .then(difficulty => res.send(difficulty));
+});
+
 router.post('/', function(req, res) {
   updateTodayProblemLink();
   res.send('Update url called')
@@ -41,6 +46,10 @@ function getTodayProblemTitle() {
 
     return `${question["frontendQuestionId"]}. ${question["title"]}`
   })
+}
+
+function getTodayProblemDifficulty() {
+  return axios.post('https://leetcode.com/graphql/', {query: query}).then(response => response.data["data"]["activeDailyCodingChallengeQuestion"]["question"]["difficulty"])
 }
 
 cron.schedule('0 */5 * * * *', () => global.gc());
