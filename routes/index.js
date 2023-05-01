@@ -54,7 +54,7 @@ function getTodayProblemDifficulty() {
 
 cron.schedule('0 */5 * * * *', () => global.gc());
 
-cron.schedule('0/10 0 9 * * *', updateTodayProblemLink, {
+cron.schedule('0 * 9 * * *', updateTodayProblemLink, {
   timezone: "Asia/Seoul"
 });
 
