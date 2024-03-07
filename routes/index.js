@@ -6,6 +6,14 @@ require('expose-gc');
 
 
 const query = '\n    query questionOfToday {\n  activeDailyCodingChallengeQuestion {\n    date\n    userStatus\n    link\n    question {\n      acRate\n      difficulty\n      freqBar\n      frontendQuestionId: questionFrontendId\n      isFavor\n      paidOnly: isPaidOnly\n      status\n      title\n      titleSlug\n      hasVideoSolution\n      hasSolution\n      topicTags {\n        name\n        id\n        slug\n      }\n    }\n  }\n}\n    '
+const operationName = 'questionOfToday'
+const variables = {}
+
+const data = {
+  query,
+  operationName,
+  variables
+}
 let todayProblemLink = null
 
 /*-----------------init region---------------------*/
@@ -32,7 +40,7 @@ router.post('/', function(req, res) {
 });
 
 function updateTodayProblemLink() {
-  axios.post('https://leetcode.com/graphql/', {query: query}).then(response => {
+  axios.post('https://leetcode.com/graphql/', data).then(response => {
     const previousUrl = todayProblemLink;
     todayProblemLink = `https://leetcode.com${response.data["data"]["activeDailyCodingChallengeQuestion"]["link"]}`
     console.log('Url Update Request')
@@ -41,7 +49,7 @@ function updateTodayProblemLink() {
 }
 
 function getTodayProblemTitle() {
-  return axios.post('https://leetcode.com/graphql/', {query: query}).then(response => {
+  return axios.post('https://leetcode.com/graphql/', data).then(response => {
     const question = response.data["data"]["activeDailyCodingChallengeQuestion"]["question"];
 
     return `${question["frontendQuestionId"]}. ${question["title"]}`
@@ -49,7 +57,7 @@ function getTodayProblemTitle() {
 }
 
 function getTodayProblemDifficulty() {
-  return axios.post('https://leetcode.com/graphql/', {query: query}).then(response => response.data["data"]["activeDailyCodingChallengeQuestion"]["question"]["difficulty"])
+  return axios.post('https://leetcode.com/graphql/', data).then(response => response.data["data"]["activeDailyCodingChallengeQuestion"]["question"]["difficulty"])
 }
 
 cron.schedule('0 */5 * * * *', () => global.gc());
